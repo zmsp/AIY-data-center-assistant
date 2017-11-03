@@ -7,6 +7,7 @@ This repository enables any data centers to harness the power of of AI (program)
 
 
 ## Features:
+* Most features from Google Home. See: [google-home-commands](https://www.androidauthority.com/google-home-commands-727911/)
 * Ping host
 * NSLookup
 * Send message to a slack channel

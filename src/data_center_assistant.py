@@ -14,7 +14,7 @@ It is available for Raspberry Pi 2/3 only; Pi Zero is not supported.
 import logging
 import subprocess
 import sys
-
+import requests
 import aiy.assistant.auth_helpers
 import aiy.audio
 import aiy.voicehat
@@ -116,14 +116,16 @@ def read_message():
                 try:
                      if not event ==[]:
                          if event[0]["type"]=="message":
-                             # prevents endless loop of replying to itself
-                             user = event[0]["user"] # not good enough for speech
-                             channel = event[0]["channel"] # not good enough for speech
-                             message = event[0]["text"]
+                            user = "Somebody"
+                            channel = "A channel"
+                            message = event[0]["text"]
+                            try:
+                                user = requests.get('https://slack.com/api/users.info', params= {'token': slack_api_token, 'user': event[0]["user"]}).json()['user']['real_name']
+                                channel = requests.get('https://slack.com/api/channels.info', params= {'token': slack_api_token, 'channel': event[0]["channel"]}).json()['channel']['name']
+                            except:
+                                traceback.print_exc()
 
-                             #TODO aiy.audio.say(user + channel + message)
-                             
-                             aiy.audio.say("Someone said " + message)
+                            aiy.audio.say(user + " said " + message + " on " + channel)
                 except:
                     traceback.print_exc()
                     aiy.audio.say("Could not read messsage")
